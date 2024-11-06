@@ -2,6 +2,7 @@
 title: "PairProgramming_If_else"
 author: "HDS"
 date: "2024-06-24"
+student: "James Mahar"
 output: html_document
 ---
 
