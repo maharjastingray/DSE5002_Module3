@@ -2,8 +2,20 @@
 title: "Week 3 Exercises"
 author: "HD Sheets"
 date: "10/1/2024"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
+student: James Mahar submitted 11/10/2024
 ---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{R}
+library('tidyverse')
+```
+
 
 Please complete all exercises below. You may use any library that we have covered in class UP TO THIS POINT. 
 
@@ -12,6 +24,7 @@ and by feeding in some test data that you create to test your function
 
 Add comments to your function to explain what each line is doing
 
+#Problem 1 
 1.) Write a function that takes in a string with a person's name in the form
 
 "Sheets, Dave"
@@ -29,31 +42,47 @@ Note:
 You will probably want to use stringr
 
 ```{R}
-name_in="Sheets, Dave"
+name_in = "Sheets, Dave"
 
-reorder_name<-function(last_first){
-  #your code here
+reorder_name <- function(name_in) 
+#split name_in into first and last names by splitting the name_in string at the comma delimiter
+{ name_parts <- str_split(name_in, ', ')[[1]] 
+#first_name <- name_parts[2] #find first name
+#last_name <- name_parts[1]  #find last nnme
+#swapped_name <- paste(first_name, last_name) #reordered name as first space last
 }
-
-
+print(name_in) #print input
+#print(swapped_name) #print 
+#print(first_name) #print name parts
+#print(last_name)
+#print("From",name_in, "To",swapped_name)
 ```
+#The [1] "Bob"   "Jane"  "Angel" output is from an old df. Why is it printing here? Plus, "swapped_name <-" does not run
 
+
+#Problem 2 ???
 2.) Write a function that takes in a string of values x, and returns a data frame
 with three columns,  x, x^2 and the square root of x
 
 ```{R}
-x=c(1,3,5,7,9,11,13)
+#Steps: name function, split the x string and convert to a vector, create a dataframe of 3 columns of x, x^2, x^0.5
 
-powers_df<-function(x)
-{
-  
+x=c(1,3,5,7,9,11,13) #setup string of values to work with
+powers_df<-function(x) #create function 
+{vec <- unlist(strsplit(x, ",")) #split the input string of values minus comma delimiters
+df <- data.frame(             #create a dataframe with calculated columns 
+original = as.numeric(vec), 
+square = as.numeric(vec)^2,
+sqroot = as.numeric(vec)^.5
+)
 }
-
-#your code here
-
+print(x) #print input string 
+print(powers_df) #print the function
+print(df) #print the dataframe of calculated column
 ```
+#I know this output is wrong. I am confused. I reassigned df so, why am I seeing output from an old df?
 
-
+#Problem 3 
 3.) Write in a function that takes in a value x and returns
     
     y= 0.3x if x<0
@@ -61,10 +90,30 @@ powers_df<-function(x)
     
     This is a variant on a relu function as used in some neural networks.
 
+```{r}
+
+#prob3func <- function(x) #create function... 
+#{
+#y=ifelse(x<7,0.3*x,0.5*x). #using ifelse() command
+#}
+#print(prob3func(2)). #print function output changing the value of x to check the code for correctness
+
+```
+
+#Problem 4 
 4.) Write a function that takes in a value x and returns the first power of two
 greater than x  (use a While loop)
+#Unfortunately I am stuck on this one!
+```{r}
 
+#prob4func <- function(x) {
+#calculate 2^1,2^2,2^3...2^y compare to x and return first 2^y > x
+#while (x<2^y)
+#}
 
+```
+
+#Problem 5 
 5) Two Sum - Write a function named two_sum()
 
 Given a vector of integers nums and an integer target, return indices of the two numbers such that they add up to target.
@@ -103,13 +152,24 @@ Only one valid answer exists.
 
 ```{r}
 two_sum <- function(nums_vector,target){
-  #your code here
- 
+    for(i in seq_along(nums_vector)) {
+    for(j in seq_along(nums_vector)[-length(nums_vector)]) {
+      
+      sum <- nums_vector[i] + nums_vector[j + 1]
+      if(sum == target) {
+        
+        first <- i
+        second <- j + 1
+        indexes <- c(first, second)
+        return(indexes)
+        
+      }
+      
+    }
+    
+  }
+  
 }
-
-
-
-
 # Test code
 nums_vector <- c(5,7,12,34,6,10,8,9)
 target <- 13
@@ -123,8 +183,8 @@ print(z)
 
 ```
 
-6.) Write one piece of code that will use a regex command to extract a phone
-number written in the form
+#Problem 6 
+6.) Write one piece of code that will use a regex command to extract a phone number written in the form
 
       456-123-2329
       
@@ -132,24 +192,68 @@ The sentences to use are located below
 
 use the str_extract function from stringr
 
-use the same regex search pattern from each
+use the same regex search pattern for each
 
--What does \\d match to?  or alternatively [[:digit:]]
+-What does \\d match to?  or alternatively [[:digit:]] ?
+Ans: I do not understand the question
 
--How do you specify a specific number of repeated characters
+-How do you specify a specific number of repeated characters ?       
+Ans: "4{3,}" specifies 3 of the the number 4 in the str_detect command: str_detect(col1, "4{3,}") 
 
 ```{R}
+
 a="Please call me at 456-123-2329, asap"
+
 b="Hey, we have a code 234 on machine a-234-12, call me at 678-321-98766"
+
 c="On 12-23-2022, Joe over at 122 Turnpike, dialled 912-835-4756, tell me by 9:02 pm Wed"
+
+
+#Look for the following pattern in each variable, a,b,c: \\d{3}(-)\\d{3}(-)\\d{4} and print the number found
+
+aphone_number <- str_extract(a,"\\d{3}(-)\\d{3}(-)\\d{4}") #extract and print the string pattern specified
+print(aphone_number)
+
+bphone_number <- str_extract(b,"\\d{3}(-)\\d{3}(-)\\d{4}") #extract and print the string pattern specified
+print(bphone_number)
+
+cphone_number <- str_extract(c,"\\d{3}(-)\\d{3}(-)\\d{4}") #extract andf print the string pattern specified
+print(cphone_number)
+
 ```
 
+#Problem 7 
 7.)  For lines below,  extract the domains (ie the part of the address after @)
 
 ```{R}
+
 d="jimmy.halibut@gmail.com"
+
 e="His address is:  c.brown@hopeles.org, do write him"
+
 f="h.potter@hogwarts.edu is bouncing back on me, I wonder why?"
+
+string <- c("jimmy.halibut@gmail.com","His address is:  c.brown@hopeles.org, do write him","h.potter@hogwarts.edu is bouncing back on me, I wonder why?" )
+
+
+str_split(d, pattern = "@") %>%  
+map_chr(2)
+
+
+dummy <- str_split(e, pattern = "@") %>% 
+map_chr(2)
+
+str_split(dummy, pattern = ", ") %>%
+map_chr(1)
+
+dumdum <- str_split(f, pattern = "@") %>% 
+map_chr(2)
+
+str_split(dumdum, pattern = " ") %>%
+map_chr(1)
+
+#library(urltools)
+#suffix_extract(domain(string))
 
 ```
 
